@@ -14,7 +14,7 @@ namespace PiShockApi
             public string? Apikey { get; set; }
             public string? Code { get; set; }
             public string? Name { get; set; }
-            public int Op { get; set; }
+            public int Op { get; set; } = 0; // Set default operation number to 0 for shock
             public int Duration { get; set; }
             public int Intensity { get; set; }
         }
@@ -25,7 +25,7 @@ namespace PiShockApi
             public string? Apikey { get; set; }
             public string? Code { get; set; }
             public string? Name { get; set; }
-            public int Op { get; set; }
+            public int Op { get; set; } = 1; // Set default operation number to 1 for Vibrate
             public int Duration { get; set; }
             public int Intensity { get; set; }
         }
@@ -36,7 +36,7 @@ namespace PiShockApi
             public string? Apikey { get; set; }
             public string? Code { get; set; }
             public string? Name { get; set; }
-            public int Op { get; set; }
+            public int Op { get; set; } = 2; // Set default operation number to 2 for Beep
             public int Duration { get; set; }
         }
     }
