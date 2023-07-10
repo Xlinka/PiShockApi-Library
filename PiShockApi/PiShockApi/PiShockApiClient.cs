@@ -1,5 +1,6 @@
 ﻿using static PiShockApi.Operations;
 using System.Net.Http.Json;
+using PiShockApi;
 
 public class PiShockApiClient
 {
@@ -13,19 +14,55 @@ public class PiShockApiClient
 
     public async Task<string> SendShockCommand(ShockCommand command)
     {
-        var response = await client.PostAsJsonAsync("apioperate/", command);
-        return await response.Content.ReadAsStringAsync();
+        try
+        {
+            var response = await client.PostAsJsonAsync("apioperate/", command);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new PiShockApiException("An error occurred during the API request.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new PiShockApiException("An unexpected error occurred.", ex);
+        }
     }
 
     public async Task<string> SendVibrateCommand(VibrateCommand command)
     {
-        var response = await client.PostAsJsonAsync("apioperate/", command);
-        return await response.Content.ReadAsStringAsync();
+        try
+        {
+            var response = await client.PostAsJsonAsync("apioperate/", command);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new PiShockApiException("An error occurred during the API request.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new PiShockApiException("An unexpected error occurred.", ex);
+        }
     }
 
     public async Task<string> SendBeepCommand(BeepCommand command)
     {
-        var response = await client.PostAsJsonAsync("apioperate/", command);
-        return await response.Content.ReadAsStringAsync();
+        try
+        {
+            var response = await client.PostAsJsonAsync("apioperate/", command);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new PiShockApiException("An error occurred during the API request.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new PiShockApiException("An unexpected error occurred.", ex);
+        }
     }
 }
