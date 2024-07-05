@@ -1,22 +1,26 @@
 name: Build and Publish
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '8.0.x'  
 
-    - name: Set Build Number
-      run: echo "BuildNumber=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+    - name: Change to Project Directory
+      run: cd PiShockApi
 
-    - name: Build with Version
+    - name: Build
       run: dotnet build --configuration Release
 
     - name: Publish
