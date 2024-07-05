@@ -1,0 +1,29 @@
+name: Build and Publish
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'  
+
+    - name: Set Build Number
+      run: echo "BuildNumber=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+    - name: Build with Version
+      run: dotnet build --configuration Release
+
+    - name: Publish
+      run: dotnet publish --configuration Release --output ./publish
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: published-app
+        path: ./publish
