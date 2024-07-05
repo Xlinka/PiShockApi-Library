@@ -16,7 +16,8 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.x'  
+        dotnet-version: '8.0.x' 
+
     - name: Set Build Number
       run: |
         $date = Get-Date -Format "yyyyMMddHHmmss"
@@ -27,14 +28,16 @@ jobs:
       run: ls
 
     - name: Build with Version and Custom DLL Name
-      run: dotnet build --configuration Release /p:AssemblyName=PiShockLibrary /p:Version=1.0.$env:BUILD_NUMBER
+      run: |
+        dotnet build --configuration Release /p:AssemblyName=PiShockLibrary /p:Version=1.0.0-alpha.$env:BUILD_NUMBER
       working-directory: ./PiShockApi
       shell: pwsh
       env:
         BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
     - name: Publish with Version and Custom DLL Name
-      run: dotnet publish --configuration Release --output ./publish /p:AssemblyName=PiShockLibrary /p:Version=1.0.$env:BUILD_NUMBER
+      run: |
+        dotnet publish --configuration Release --output ./publish /p:AssemblyName=PiShockLibrary /p:Version=1.0.0-alpha.$env:BUILD_NUMBER
       working-directory: ./PiShockApi
       shell: pwsh
       env:
