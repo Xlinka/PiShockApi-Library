@@ -6,32 +6,39 @@ on:
       - main
 
 jobs:
-  build_and_deploy:  
-    runs-on: windows-latest 
-    - name: Checkout Code  
-      uses: actions/checkout@v3 
+  build_and_publish:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.x' 
-
-    - name: Set Build Number  
+        dotnet-version: '8.0.x'  
+    - name: Set Build Number
       run: |
         $date = Get-Date -Format "yyyyMMddHHmmss"
         echo "BUILD_NUMBER=$date" | Out-File -FilePath $env:GITHUB_ENV -Append
+      shell: pwsh
+
+    - name: List contents of the repository root
+      run: ls
 
     - name: Build with Version and Custom DLL Name
-      run: dotnet build --configuration Release /p:AssemblyName=PiShockLibrary /p:Version=1.0.$(BuildNumber)
+      run: dotnet build --configuration Release /p:AssemblyName=PiShockLibrary /p:Version=1.0.$env:BUILD_NUMBER
       working-directory: ./PiShockApi
+      shell: pwsh
       env:
-        BuildNumber: ${{ env.BUILD_NUMBER }}
+        BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
     - name: Publish with Version and Custom DLL Name
-      run: dotnet publish --configuration Release --output ./publish /p:AssemblyName=PiShockLibrary /p:Version=1.0.$(BuildNumber)
+      run: dotnet publish --configuration Release --output ./publish /p:AssemblyName=PiShockLibrary /p:Version=1.0.$env:BUILD_NUMBER
       working-directory: ./PiShockApi
+      shell: pwsh
       env:
-        BuildNumber: ${{ env.BUILD_NUMBER }}
+        BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
