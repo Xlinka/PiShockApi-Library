@@ -1,6 +1,9 @@
-name: Build and Publish 
+name: Build and Publish
 
-on: [push]  
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build_and_deploy:  
