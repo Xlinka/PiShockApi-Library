@@ -16,8 +16,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.x' 
-
+        dotnet-version: '8.0.x'  
     - name: Set Build Number
       run: |
         $date = Get-Date -Format "yyyyMMddHHmmss"
@@ -43,8 +42,25 @@ jobs:
       env:
         BUILD_NUMBER: ${{ env.BUILD_NUMBER }}
 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: PiShockLibrary
-        path: ./PiShockApi/publish/PiShockLibrary.dll
+        tag_name: v1.0.0-alpha.${{ env.BUILD_NUMBER }}
+        release_name: Release v1.0.0-alpha.${{ env.BUILD_NUMBER }}
+        body: |
+          Automated release for version 1.0.0-alpha.${{ env.BUILD_NUMBER }}
+        draft: false
+        prerelease: true
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./PiShockApi/publish/PiShockLibrary.dll
+        asset_name: PiShockLibrary.dll
+        asset_content_type: application/octet-stream
