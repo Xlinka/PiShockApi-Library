@@ -15,19 +15,25 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '8.0.x'  
+        dotnet-version: '8.0.x' 
+
+    - name: List contents of the repository root
+      run: ls
 
     - name: Change to Project Directory
       run: cd PiShockApi
 
-    - name: Build
-      run: dotnet build --configuration Release
+    - name: List contents of the PiShockApi directory
+      run: ls
 
-    - name: Publish
-      run: dotnet publish --configuration Release --output ./publish
+    - name: Build with Version and Custom DLL Name
+      run: dotnet build --configuration Release /p:AssemblyName=PiShockLibrary /p:Version=1.0.$(BuildNumber)
+
+    - name: Publish with Version and Custom DLL Name
+      run: dotnet publish --configuration Release --output ./publish /p:AssemblyName=PiShockLibrary /p:Version=1.0.$(BuildNumber)
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: published-app
-        path: ./publish
+        name: PiShockLibrary
+        path: ./publish/PiShockLibrary.dll
