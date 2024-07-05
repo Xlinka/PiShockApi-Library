@@ -17,23 +17,22 @@ jobs:
       with:
         dotnet-version: '8.0.x' 
 
+    - name: Set Build Number
+      run: echo "BUILD_NUMBER=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
     - name: List contents of the repository root
       run: ls
 
-    - name: Change to Project Directory
-      run: cd PiShockApi
-
-    - name: List contents of the PiShockApi directory
-      run: ls
-
     - name: Build with Version and Custom DLL Name
-      run: dotnet build --configuration Release /p:AssemblyName=PiShockLibrary /p:Version=1.0.$(BuildNumber)
+      run: dotnet build --configuration Release /p:AssemblyName=PiShockLibrary /p:Version=1.0.$env:BUILD_NUMBER
+      working-directory: ./PiShockApi
 
     - name: Publish with Version and Custom DLL Name
-      run: dotnet publish --configuration Release --output ./publish /p:AssemblyName=PiShockLibrary /p:Version=1.0.$(BuildNumber)
+      run: dotnet publish --configuration Release --output ./publish /p:AssemblyName=PiShockLibrary /p:Version=1.0.$env:BUILD_NUMBER
+      working-directory: ./PiShockApi
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: PiShockLibrary
-        path: ./publish/PiShockLibrary.dll
+        path: ./PiShockApi/publish/PiShockLibrary.dll
